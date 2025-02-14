@@ -89,7 +89,7 @@ class AddUserSection:
 
         # Create form frame on the left
         form_frame = tk.Frame(content_frame, bg="#ffffff")
-        form_frame.pack(side='left', fill='both', expand=True, padx=(40, 0))  # Remove padding on the right
+        form_frame.pack(side='left', fill='both', expand=True, padx=(40, 0))  
 
         canvas = tk.Canvas(form_frame, bg="#ffffff", yscrollcommand=scrollbar.set, highlightthickness=0)
         scrollable_frame = tk.Frame(canvas, bg="#ffffff")
@@ -104,32 +104,27 @@ class AddUserSection:
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.pack(side="left", fill="both", expand=True)
 
-        # Link the scrollbar to the canvas
         scrollbar.config(command=canvas.yview)
 
-        # Add image frame on the right
-        image_frame = tk.Frame(content_frame, bg="#ffffff", width=400)  # Adjust width
-        image_frame.pack(side='right', fill='y', padx=(0, 40))  # Add padding only on the left
+        image_frame = tk.Frame(content_frame, bg="#ffffff", width=400)  
+        image_frame.pack(side='right', fill='y', padx=(0, 40))  
 
-        # Resize and display image
         try:
-            image_path = "assets/data.jpg"  # Replace with your image path
+            image_path = "assets/data.jpg"  
             original_image = Image.open(image_path)
 
-            # Resize image to fit the increased width and height while maintaining aspect ratio
             image_frame.update()
-            image_width = int(image_frame.winfo_width() * 1.5)  # Increase size
+            image_width = int(image_frame.winfo_width() * 1.5)  
             resized_image = original_image.resize(
                 (image_width, int(image_width * original_image.height / original_image.width)), Image.LANCZOS
             )
 
             photo = ImageTk.PhotoImage(resized_image)
             image_label = tk.Label(image_frame, image=photo, bg="#ffffff")
-            image_label.image = photo  # Keep a reference to prevent garbage collection
+            image_label.image = photo  
             image_label.pack(fill='both', expand=True)
         except Exception as e:
             print(f"Error loading image: {e}")
-            # Optional: Add a placeholder if image loading fails
             error_label = tk.Label(image_frame, text="Image Not Found", bg="#ffffff")
             error_label.pack(expand=True)
 
@@ -137,12 +132,10 @@ class AddUserSection:
                             font=("Arial", 20, "bold"), bg="#ffffff")
         title_label.pack(pady=10)
 
-        # Create sections
         self.create_personal_section(scrollable_frame)
         self.create_education_section(scrollable_frame)
         self.create_internship_section(scrollable_frame)
 
-        # Save Button
         save_icon = Image.open("assets/save-btn-img.png").resize((100, 50))
         save_img = ImageTk.PhotoImage(save_icon)
         save_btn = tk.Button(scrollable_frame, command=self.save_user, image=save_img, bd=0, highlightthickness=0, borderwidth=0)
@@ -175,7 +168,6 @@ class AddUserSection:
             entry = tk.Entry(frame, textvariable=var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK")
             entry.pack(side='left', expand=True, fill='x')
 
-            # Add specific validations
             if label_text == "Age":
                 register_validation(entry, validate_age)
 
@@ -194,7 +186,6 @@ class AddUserSection:
         tk.Label(parent, text="Educational Information", 
              font=("Arial", 16), bg="#ffffff").pack(pady=10)
 
-        # Function to toggle education type fields
         def toggle_education_type(*args):
             education_type = self.education_type_var.get()
             
@@ -204,24 +195,22 @@ class AddUserSection:
                 diploma_percent_frame.pack_forget()
                 self.hsc_diploma_var.set("")
                 self.diploma_stream_var.set("")
-            else:  # Diploma
+            else:  
                 hsc_percent_frame.pack_forget()
                 diploma_stream_frame.pack(fill='x', padx=50, pady=5, after=education_type_frame)
                 diploma_percent_frame.pack(fill='x', padx=50, pady=5, after=diploma_stream_frame)
                 self.hsc_diploma_var.set("")
 
-        # Function to toggle degree status fields
         def toggle_degree_status(*args):
             degree_status = self.degree_status_var.get()
             
             if degree_status == "Pursuing":
                 current_year_frame.pack(fill='x', padx=50, pady=5, after=degree_status_frame)
                 completion_year_frame.pack_forget()
-            else:  # Completed
+            else:  
                 current_year_frame.pack_forget()
                 completion_year_frame.pack(fill='x', padx=50, pady=5, after=degree_status_frame)
 
-        # SSC Percentage
         ssc_frame = tk.Frame(parent, bg="#ffffff")
         ssc_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(ssc_frame, text="SSC Percentage", width=15, anchor='w', bg="#ffffff").pack(side='left')
@@ -229,7 +218,6 @@ class AddUserSection:
         ssc_entry.pack(side='left', expand=True, fill='x')
         register_validation(ssc_entry, validate_float)
 
-        # Education Type Selection
         education_type_frame = tk.Frame(parent, bg="#ffffff")
         education_type_frame.pack(pady=10)
         
@@ -242,31 +230,26 @@ class AddUserSection:
                         value="Diploma", bg="#ffffff", command=toggle_education_type)
         diploma_radio.pack(side='left')
 
-        # HSC Percentage Frame
         hsc_percent_frame = tk.Frame(parent, bg="#ffffff")
         tk.Label(hsc_percent_frame, text="HSC Percentage", width=15, anchor='w', bg="#ffffff").pack(side='left')
         hsc_diploma_entry = tk.Entry(hsc_percent_frame, textvariable=self.hsc_diploma_var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK")
         hsc_diploma_entry.pack(side='left', expand=True, fill='x')
         register_validation(hsc_diploma_entry, validate_float)
 
-        # Diploma Stream Frame
         diploma_stream_frame = tk.Frame(parent, bg="#ffffff")
         tk.Label(diploma_stream_frame, text="Diploma Stream", width=15, anchor='w', bg="#ffffff").pack(side='left')
         diploma_stream_entry = tk.Entry(diploma_stream_frame, textvariable=self.diploma_stream_var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK")
         diploma_stream_entry.pack(side='left', expand=True, fill='x')
 
-        # Diploma Percentage Frame
         diploma_percent_frame = tk.Frame(parent, bg="#ffffff")
         tk.Label(diploma_percent_frame, text="Diploma Percentage", width=15, anchor='w', bg="#ffffff").pack(side='left')
         diploma_percent_entry = tk.Entry(diploma_percent_frame, textvariable=self.hsc_diploma_var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK")
         diploma_percent_entry.pack(side='left', expand=True, fill='x')
         register_validation(diploma_percent_entry, validate_float)
 
-        # Degree Details
         tk.Label(parent, text="Degree Details", 
                 font=("Arial", 14), bg="#ffffff").pack(pady=10)
 
-        # Degree Status Selection
         degree_status_frame = tk.Frame(parent, bg="#ffffff")
         degree_status_frame.pack(pady=10)
         
@@ -281,12 +264,11 @@ class AddUserSection:
                         value="Completed", bg="#ffffff", command=toggle_degree_status)
         completed_radio.pack(side='left')
 
-        # Degree Type Frame
         degree_type_frame = tk.Frame(parent, bg="#ffffff")
         degree_type_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(degree_type_frame, text="Degree Type", width=15, anchor='w', bg="#ffffff").pack(side='left')
         combobox_frame = tk.Frame(degree_type_frame, highlightthickness=1, highlightbackground="BLACK")
-        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  # Add padding for a cleaner look
+        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  
         degree_types = ["B.Tech", "B.E", "B.Com", "BCA", "B.Sc", "B.A"]
         degree_type_dropdown = ttk.Combobox(
             combobox_frame,
@@ -296,12 +278,11 @@ class AddUserSection:
         )
         degree_type_dropdown.pack(fill='x')
 
-        # Current Year Frame
         current_year_frame = tk.Frame(parent, bg="#ffffff")
         current_years = ["1st Year", "2nd Year", "3rd Year", "4th Year"]
         tk.Label(current_year_frame, text="Current Year", width=15, anchor='w', bg="#ffffff").pack(side='left')
         combobox_frame = tk.Frame(current_year_frame, highlightthickness=1, highlightbackground="BLACK")
-        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  # Add padding for a cleaner look
+        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  
         current_year_dropdown = ttk.Combobox(
             combobox_frame, 
             textvariable=self.current_year_var, 
@@ -311,12 +292,11 @@ class AddUserSection:
         current_year_dropdown.pack(fill='x')
         current_year_dropdown.current(0)
 
-        # Completion Year Frame
         completion_year_frame = tk.Frame(parent, bg="#ffffff")
         completion_years = [str(year) for year in range(2025, datetime.now().year-10, -1)]
         tk.Label(completion_year_frame, text="Completion Year", width=15, anchor='w', bg="#ffffff").pack(side='left')
         combobox_frame = tk.Frame(completion_year_frame, highlightthickness=1, highlightbackground="BLACK")
-        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  # Add padding for a cleaner look
+        combobox_frame.pack(side='left', expand=True, fill='x', padx=5) 
         completion_year_dropdown = ttk.Combobox(
             combobox_frame, 
             textvariable=self.completion_year_var, 
@@ -326,13 +306,11 @@ class AddUserSection:
         completion_year_dropdown.pack(fill='x')
         completion_year_dropdown.current(0)
 
-        # Degree Stream
         degree_stream_frame = tk.Frame(parent, bg="#ffffff")
         degree_stream_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(degree_stream_frame, text="Degree Stream", width=15, anchor='w', bg="#ffffff").pack(side='left')
         tk.Entry(degree_stream_frame, textvariable=self.degree_stream_var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK").pack(side='left', expand=True, fill='x')
 
-        # Degree Percentage
         degree_percent_frame = tk.Frame(parent, bg="#ffffff")
         degree_percent_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(degree_percent_frame, text="Degree Percentage", width=15, anchor='w', bg="#ffffff").pack(side='left')
@@ -340,14 +318,12 @@ class AddUserSection:
         degree_percent_entry.pack(side='left', expand=True, fill='x')
         register_validation(degree_percent_entry, validate_float)
         
-        # Add Skills field
         skills_frame = tk.Frame(parent, bg="#ffffff")
         skills_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(skills_frame, text="Skills", width=15, anchor='w', bg="#ffffff").pack(side='left')
         tk.Entry(skills_frame, textvariable=self.skills_var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK").pack(side='left', expand=True, fill='x')
 
 
-        # Resume Upload
         resume_frame = tk.Frame(parent, bg="#ffffff")
         resume_frame.pack(fill='x', padx=50, pady=10)
         tk.Label(resume_frame, text="Resume Upload", width=15, anchor='w', bg="#ffffff").pack(side='left')
@@ -360,7 +336,6 @@ class AddUserSection:
         # resume_btn.pack(side='left')
         tk.Label(resume_frame, textvariable=self.resume_path_var, bg="#ffffff").pack(side='left', padx=10)
 
-        # Initial setup of frames
         self.education_type_var.set("HSC")
         self.degree_status_var.set("Pursuing")
         toggle_education_type()
@@ -395,7 +370,6 @@ class AddUserSection:
         tk.Label(parent, text="Internship Details", 
              font=("Arial", 16), bg="#ffffff").pack(pady=10)
 
-        # Function to toggle payment type fields
         def toggle_payment_type():
             payment_type = self.payment_type_var.get()
             
@@ -408,29 +382,26 @@ class AddUserSection:
                 stipend_frequency_frame.pack_forget()
                 self.stipend_amount_var.set("")
 
-        # Role Selection
         role_frame = tk.Frame(parent, bg="#ffffff")
         role_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(role_frame, text="Role", width=15, anchor='w', bg="#ffffff").pack(side='left')
         role_dropdown = tk.Entry(role_frame, textvariable=self.role_var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK")
         role_dropdown.pack(side='left', expand=True, fill='x')
 
-        # Duration Selection
         duration_frame = tk.Frame(parent, bg="#ffffff")
         duration_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(duration_frame, text="Duration", width=15, anchor='w', bg="#ffffff").pack(side='left')
         combobox_frame = tk.Frame(duration_frame, highlightthickness=1, highlightbackground="BLACK")
-        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  # Add padding for a cleaner look
+        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  
         durations = ["select", "3 months", "4 months", "5 months", "6 months"]
         duration_dropdown = ttk.Combobox(combobox_frame, textvariable=self.duration_var, values=durations, width=37)
         duration_dropdown.pack(fill='x')
 
-        # Joining Date
         joining_frame = tk.Frame(parent, bg="#ffffff")
         joining_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(joining_frame, text="Joining Date", width=15, anchor='w', bg="#ffffff").pack(side='left')
         date_frame = tk.Frame(joining_frame, highlightthickness=1, highlightbackground="BLACK")
-        date_frame.pack(side='left', expand=True, fill='x', padx=5)  # Add padding for a cleaner look
+        date_frame.pack(side='left', expand=True, fill='x', padx=5)  
         joining_date_calendar = DateEntry(
             date_frame, 
             textvariable=self.joining_date_var, 
@@ -439,12 +410,11 @@ class AddUserSection:
         )
         joining_date_calendar.pack(fill='x')
 
-        # Ending Date
         ending_frame = tk.Frame(parent, bg="#ffffff")
         ending_frame.pack(fill='x', padx=50, pady=5)
         tk.Label(ending_frame, text="Ending Date", width=15, anchor='w', bg="#ffffff").pack(side='left')
         date_frame = tk.Frame(ending_frame, highlightthickness=1, highlightbackground="BLACK")
-        date_frame.pack(side='left', expand=True, fill='x', padx=5)  # Add padding for a cleaner look
+        date_frame.pack(side='left', expand=True, fill='x', padx=5)  
         ending_date_calendar = DateEntry(
             date_frame, 
             textvariable=self.ending_date_var, 
@@ -453,7 +423,6 @@ class AddUserSection:
         )
         ending_date_calendar.pack(fill='x')
 
-        # Payment Type
         payment_frame = tk.Frame(parent, bg="#ffffff")
         payment_frame.pack(pady=10)
         tk.Label(payment_frame, text="Payment Type", bg="#ffffff").pack(side='left', padx=10)
@@ -468,17 +437,15 @@ class AddUserSection:
                         value="Unpaid", bg="#ffffff", command=toggle_payment_type)
         unpaid_radio.pack(side='left')
 
-        # Stipend Amount Frame
         stipend_amount_frame = tk.Frame(parent, bg="#ffffff")
         tk.Label(stipend_amount_frame, text="Stipend Amount", width=15, anchor='w', bg="#ffffff").pack(side='left')
         stipend_amount_entry = tk.Entry(stipend_amount_frame, textvariable=self.stipend_amount_var, width=40, highlightthickness=1, highlightbackground="BLACK", highlightcolor="BLACK")
         stipend_amount_entry.pack(side='left', expand=True, fill='x')
 
-        # Stipend Frequency Frame
         stipend_frequency_frame = tk.Frame(parent, bg="#ffffff")
         tk.Label(stipend_frequency_frame, text="Stipend Frequency", width=15, anchor='w', bg="#ffffff").pack(side='left')
         combobox_frame = tk.Frame(stipend_frequency_frame, highlightthickness=1, highlightbackground="BLACK")
-        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  # Add padding for a cleaner look
+        combobox_frame.pack(side='left', expand=True, fill='x', padx=5)  
         frequencies = ["per month", "one-time", "per project"]
         stipend_frequency_dropdown = ttk.Combobox(
             combobox_frame, 
@@ -489,13 +456,11 @@ class AddUserSection:
         stipend_frequency_dropdown.pack(fill='x')
         stipend_frequency_dropdown.current(0)
 
-        # Initial setup
         self.payment_type_var.set("Unpaid")
         toggle_payment_type()
 
     def save_user(self):
         try:
-            # Validate required fields
             required_fields = {
                 'First Name': self.first_name_var.get().strip(),
                 'Last Name': self.last_name_var.get().strip(),
@@ -511,13 +476,11 @@ class AddUserSection:
                 'Ending Date': self.ending_date_var.get()
             }
 
-            # Check for empty required fields
             for field_name, value in required_fields.items():
                 if not value or value == 'select':
                     messagebox.showerror("Validation Error", f"{field_name} is required!")
                     return
 
-            # Prepare personal data dictionary
             user_data = {
                 'first_name': self.first_name_var.get().strip(),
                 'middle_name': self.middle_name_var.get().strip(),
@@ -529,16 +492,13 @@ class AddUserSection:
                 'address': self.address_var.get().strip()
             }
 
-            # Insert user data and get user_id
             user_id = self.db.insert_user(user_data)
 
-            # Prepare and encode resume
             resume_data = None
             if self.resume_path_var.get():
                 with open(self.resume_path_var.get(), 'rb') as f:
                     resume_data = base64.b64encode(f.read()).decode('utf-8')
                     
-            # Prepare education data
             education_data = {
                 'user_id': user_id,
                 'ssc_percentage': float(self.ssc_var.get()),
@@ -555,10 +515,8 @@ class AddUserSection:
                 'resume': resume_data,
             }
 
-            # Insert education data
             education_id = self.db.insert_education(education_data)
 
-            # Prepare internship data
             internship_data = {
                 'user_id': user_id,
                 'role': self.role_var.get(),
@@ -570,12 +528,10 @@ class AddUserSection:
                 'stipend_frequency': self.stipend_frequency_var.get() if self.payment_type_var.get() == "Paid" else None
             }
 
-            # Insert internship data
             internship_id = self.db.insert_internship(internship_data)
 
             messagebox.showinfo("Success", "User data saved successfully!")
             
-            # Optional: Clear fields after successful save
             self.clear_all_fields()
 
         except ValueError as ve:

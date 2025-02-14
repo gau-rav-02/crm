@@ -6,16 +6,12 @@ from config import MONGO_CONNECTION_STRING
 class DatabaseConnection:
     def __init__(self):
         try:
-            # Connect using the connection string
             self.client = pymongo.MongoClient(MONGO_CONNECTION_STRING, server_api=ServerApi('1'))
             
-            # Verify connection
             self.client.admin.command('ping')
             
-            # Select database
             self.db = self.client['nptech_crm']
             
-            # Create collections
             self.users_collection = self.db['users']
             self.education_collection = self.db['education']
             self.internships_collection = self.db['internships']
@@ -36,7 +32,6 @@ class DatabaseConnection:
         return user is not None
 
     def register_user(self, username, password):
-        # Check if username already exists
         existing_user = self.login_collection.find_one({'username': username})
         if existing_user:
             return False
